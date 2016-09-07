@@ -22,17 +22,12 @@
         <ul id="user-list"></ul>
     </div>
     <template id="existing-user-template">
-        <li class="twitch-user">
-            <img src="{{logo}}" alt="{{display_name}}'s TwitchTV profile image">
-            <h1 class="user-name">{{display_name}}</h1>
-            <div class="status">{{status}}</div>
-            <a href="{{url}}">{{channel}}</a>
-            <div class="current-game">{{game}}</div>
-        </li>
-    </template>
-    <template id="not-existing-user-template">
-        <li class="no-user">
-            <p>user {{display_name}} does not exist</p>
+        <li class="twitch-user row">
+            <img src="{{logo}}" class="img-rounded col-xs-2" alt="{{display_name}}'s TwitchTV profile image">
+            <h1 class="user-name col-xs-3">{{display_name}}</h1>
+            <div class="status col-xs-3">{{status}}</div>
+            <a href="{{url}}" class="col-xs-2" target="_blank">Link to Channel</a>
+            <div class="current-game col-xs-2">{{game}}</div>
         </li>
     </template>
     <template id="modal-info-template">
