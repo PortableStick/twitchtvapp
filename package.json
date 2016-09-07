@@ -3,7 +3,19 @@
   "version": "1.0.0",
   "description": "A remake of my TwitchTV viewer app",
   "browserify": {
-    "transform": [["babelify", { "presets": ["es2015"] }], ["uglifyify"]]
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ],
+      [
+        "uglifyify"
+      ]
+    ]
   },
   "scripts": {
     "server": "browser-sync start -s 'dist' -f 'dist'",
@@ -50,6 +62,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "handlebars": "^4.0.5",
-    "jquery": "^3.1.0"
+    "jquery": "^3.1.0",
+    "rxjs": "^5.0.0-beta.11"
   }
 }
