@@ -1,18 +1,16 @@
 import $ from 'jquery';
 import handlebars from 'handlebars';
-import Rx, { Observable, ReplaySubject } from 'rxjs/Rx';
+import { Observable, ReplaySubject } from 'rxjs/Rx';
 
-    const existingUserTemplate = handlebars.compile($('#existing-user-template').html()),
-             $userList = $('#user-list'),
-             $filterInput = $('#filter-input'),
-             $buttons = $('.sort'),
-             gettingFilterInput = Observable.fromEvent($filterInput, 'keyup')
-                            .map(e => e.target.value)
-                            .startWith(''),
-             gettingButtonInput = Observable.fromEvent($buttons, 'click')
-                            .map(e => $(e.target).data('value'))
-                            .startWith('all'),
-            storedUsers = new ReplaySubject();
+const existingUserTemplate = handlebars.compile($('#existing-user-template').html()),
+        $userList = $('#user-list'),
+        gettingFilterInput = Observable.fromEvent($('#filter-input'), 'keyup')
+                        .map(e => e.target.value)
+                        .startWith(''),
+        gettingButtonInput = Observable.fromEvent($('.sort'), 'click')
+                        .map(e => $(e.target).data('value'))
+                        .startWith('all'),
+        storedUsers = new ReplaySubject();
 
 const getUsers = Observable.create(observer => {
     if(!localStorage.getItem('hasBeenRun')) {
@@ -31,18 +29,19 @@ const getUsers = Observable.create(observer => {
     .subscribe(storedUsers);
 
 gettingFilterInput
-.combineLatest(gettingButtonInput, (filter, button) => ({filter, button}))
-.do(() => {
-    $userList.html('');
-})
-.flatMap(input => storedUsers.filter(user => {
-    if(input.button !== 'all') {
-        return user.display_name.toLowerCase().includes(input.filter.toLowerCase()) && user.isStreaming === input.button;
-    } else {
-        return user.display_name.toLowerCase().includes(input.filter.toLowerCase());
-    }
-}))
-.subscribe(data => {
-    $userList.append(existingUserTemplate(data))
-})
+    .combineLatest(gettingButtonInput, (filter, button) => ({filter, button}))
+    .do(() => {
+        $userList.html('');
+    })
+    .flatMap(input => storedUsers.filter(user => {
+        if(input.button !== 'all') {
+            return user.display_name.toLowerCase().includes(input.filter.toLowerCase()) && user.isStreaming === input.button;
+        } else {
+            return user.display_name.toLowerCase().includes(input.filter.toLowerCase());
+        }
+    }))
+    .subscribe(data => {
+        $userList.append(existingUserTemplate(data))
+    });
 
+handlebars.registerHelper('jsonify', object => JSON.stringify(object));

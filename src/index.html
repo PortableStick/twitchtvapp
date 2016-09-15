@@ -28,7 +28,7 @@
         <ul id="user-list"></ul>
     </div>
     <template id="existing-user-template">
-        <li class="twitch-user row">
+        <li class="twitch-user row" data-store="{{jsonify @root}}">
             <img src="{{logo}}" class="img-rounded col-xs-2 user-logo" alt="{{display_name}}'s TwitchTV profile image">
             <h1 class="user-name col-xs-2">{{display_name}}</h1>
             <div class="status col-xs-2">{{status}}</div>
