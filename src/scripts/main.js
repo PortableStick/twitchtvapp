@@ -1,27 +1,48 @@
 import $ from 'jquery';
 import handlebars from 'handlebars';
-import Rx from 'rxjs/Rx';
+import Rx, { Observable, ReplaySubject } from 'rxjs/Rx';
 
-const existingUserTemplate = handlebars.compile($('#existing-user-template').html());
-const $userList = $('#user-list');
+    const existingUserTemplate = handlebars.compile($('#existing-user-template').html()),
+             $userList = $('#user-list'),
+             $filterInput = $('#filter-input'),
+             $buttons = $('.sort'),
+             gettingFilterInput = Observable.fromEvent($filterInput, 'keyup')
+                            .map(e => e.target.value)
+                            .startWith(''),
+             gettingButtonInput = Observable.fromEvent($buttons, 'click')
+                            .map(e => $(e.target).data('value'))
+                            .startWith('all'),
+            storedUsers = new ReplaySubject();
 
-function getTwitchData(user) {
-    return Rx.Observable.fromPromise($.getJSON(`http://localhost:9000/twitch/${user}`).promise());
-}
-
-$(document).ready(() => {
-    if(!localStorage.getItem('firstRun')) {
-        const startingNames = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas", "barflkjasfd"];
+const getUsers = Observable.create(observer => {
+    if(!localStorage.getItem('hasBeenRun')) {
+        const startingNames = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
         localStorage.setItem('users', JSON.stringify(startingNames));
-        localStorage.setItem('firstRun', 'true');
+        localStorage.setItem('hasBeenRun', 'true');
+        observer.next(startingNames);
+    } else {
+        observer.next(JSON.parse(localStorage.getItem('users')));
     }
+}).flatMap(user => user)
+    .flatMap(user => Observable.ajax({
+        url:`http://localhost:9000/twitch/${user}`,
+        responseType: 'json'}))
+    .map(response => response.response)
+    .subscribe(storedUsers);
 
-    const userNames = Rx.Observable.from(JSON.parse(localStorage.getItem('users')));
+gettingFilterInput
+.combineLatest(gettingButtonInput, (filter, button) => ({filter, button}))
+.do(() => {
+    $userList.html('');
+})
+.flatMap(input => storedUsers.filter(user => {
+    if(input.button !== 'all') {
+        return user.display_name.toLowerCase().includes(input.filter.toLowerCase()) && user.isStreaming === input.button;
+    } else {
+        return user.display_name.toLowerCase().includes(input.filter.toLowerCase());
+    }
+}))
+.subscribe(data => {
+    $userList.append(existingUserTemplate(data))
+})
 
-    let rxusernames = userNames.flatMap(getTwitchData);
-    console.log(rxusernames);
-    rxusernames.subscribe(data => {
-        $userList.append(existingUserTemplate(data));
-    });
-
-});
