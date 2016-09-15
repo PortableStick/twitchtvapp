@@ -1,9 +1,15 @@
 import $ from 'jquery';
 import handlebars from 'handlebars';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
+window.$ = window.jQuery = $;
+require('bootstrap/js/modal');
+$.noConflict(true);
+
 
 const existingUserTemplate = handlebars.compile($('#existing-user-template').html()),
+        userModalTemplate = handlebars.compile($('#user-modal-template').html()),
         $userList = $('#user-list'),
+        $userModal = $('#user-modal'),
         gettingFilterInput = Observable.fromEvent($('#filter-input'), 'keyup')
                         .map(e => e.target.value)
                         .startWith(''),
@@ -11,6 +17,19 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
                         .map(e => $(e.target).data('value'))
                         .startWith('all'),
         storedUsers = new ReplaySubject();
+
+Observable.fromEvent(document, 'DOMContentLoaded')
+    .flatMap(() => Observable.fromEvent($('#user-list'), 'click'))
+    .map(e => $(e.target).data('store'))
+    .subscribe(data => {
+        $userModal.append(userModalTemplate(data));
+        $userModal.modal('show');
+    });
+
+Observable.fromEvent($userModal, 'hidden.bs.modal')
+    .subscribe(e => {
+        $userModal.html('');
+    })
 
 const getUsers = Observable.create(observer => {
     if(!localStorage.getItem('hasBeenRun')) {
@@ -43,5 +62,6 @@ gettingFilterInput
     .subscribe(data => {
         $userList.append(existingUserTemplate(data))
     });
+
 
 handlebars.registerHelper('jsonify', object => JSON.stringify(object));
