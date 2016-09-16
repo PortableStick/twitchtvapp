@@ -21,11 +21,28 @@
 .twitch-user {
     margin-top: 15px;
     cursor: pointer;
-    border: 1px solid black;
     border-radius: 5px;
     .user-logo {
         max-width: 100px;
     }
+}
+
+.modal-body {
+    .user-preview-modal {
+        margin-top: 20px;
+    }
+}
+
+.status {
+    display:flex;
+    align-items: center;
+}
+
+.streaming {
+    color: green;
+}
+.not-streaming {
+    color: red;
 }
 
 .error {

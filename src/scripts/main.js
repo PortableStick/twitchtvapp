@@ -10,17 +10,22 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
         userModalTemplate = handlebars.compile($('#user-modal-template').html()),
         $userList = $('#user-list'),
         $userModal = $('#user-modal'),
+        $buttonInput = $('.sort'),
         gettingFilterInput = Observable.fromEvent($('#filter-input'), 'keyup')
                         .map(e => e.target.value)
                         .startWith(''),
-        gettingButtonInput = Observable.fromEvent($('.sort'), 'click')
+        gettingButtonInput = Observable.fromEvent($buttonInput, 'click')
+                        .do(e => {
+                            $buttonInput.removeClass('active');
+                            $(e.target).addClass('active');
+                        })
                         .map(e => $(e.target).data('value'))
                         .startWith('all'),
         storedUsers = new ReplaySubject();
 
 Observable.fromEvent(document, 'DOMContentLoaded')
     .flatMap(() => Observable.fromEvent($('#user-list'), 'click'))
-    .map(e => $(e.target).data('store'))
+    .map(event => $(event.target).closest('.twitch-user').data('store'))
     .subscribe(data => {
         $userModal.append(userModalTemplate(data));
         $userModal.modal('show');

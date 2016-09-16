@@ -19,25 +19,32 @@
         </ul>
     </nav>
     <div class="container-fluid" id="app">
-        <label for="filter">Filter</label>
+        <div class="container">
+        <label for="filter form-control">Filter</label>
         <input type="text" name="filter" id="filter-input" autocomplete="off" autofocus="true">
-        <div class="sort btn btn-primary" data-value="all">All</div>
-        <div class="sort btn btn-primary" data-value="true">Online</div>
-        <div class="sort btn btn-primary" data-value="false">Offline</div>
-        <h1 class="error"></h1>
-        <ul id="user-list"></ul>
+        <button class="sort btn btn-primary active" data-value="all">All</button>
+        <button class="sort btn btn-primary" data-value="true">Online</button>
+        <button class="sort btn btn-primary" data-value="false">Offline</button>
+            <h1 class="error"></h1>
+            <ul id="user-list"></ul>
+        </div>
     </div>
     <template id="existing-user-template">
         <li class="twitch-user row" data-store="{{jsonify @root}}">
-            <img src="{{logo}}" class="img-rounded col-xs-2 user-logo" alt="{{display_name}}'s TwitchTV profile image">
-            <h1 class="user-name col-xs-2">{{display_name}}</h1>
-            <div class="status col-xs-2">{{status}}</div>
-            <a href="{{url}}" class="col-xs-2" target="_blank">Link to Channel</a>
-            <div class="current-game col-xs-2">{{game}}</div>
+            <img src="{{logo}}" class="img-rounded col-xs-2 user-logo thumbnail" alt="{{display_name}}'s TwitchTV profile image">
+            <a href="{{url}}" class="col-xs-3" target="_blank">
+                <h1 class="user-name">{{display_name}}</h1>
+            </a>
+            <div class="status col-xs-3">{{status}}</div>
+            {{#if isStreaming}}
+            <div class="current-game col-xs-3"><span class="streaming">Currently streaming:</span> {{game}}</div>
+            {{else}}
+            <div class="not-streaming col-xs-3">Not currently streaming</div>
+            {{/if}}
         </li>
     </template>
     <template id="user-modal-template">
-        <div class="modal-dialog" role="document" id="empty-modal">
+        <div class="modal-dialog modal-lg" role="document" id="empty-modal">
 <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -46,12 +53,27 @@
             <h4 class="modal-title" id="modal-label">{{display_name}}'s Twitch Profile</h4>
           </div>
           <div class="modal-body">
-            <img src="{{logo}}" alt="{{display_name}}'s TwitchTV profile image">
-            <h1 class="user-name">{{display_name}}</h1>
-            <div class="status">{{status}}</div>
-            <a href="{{url}}">{{channel}}</a>
-            <div class="current-game">{{game}}</div>
-            <img src="{{preview}}" alt="An image of {{display_name}} playing {{game}}">
+
+            <div class="row">
+                <a href="{{url}}" id="user-logo-modal" class="col-xs-6" target="_blank">
+                    <img src="{{logo}}" alt="{{display_name}}'s TwitchTV profile image">
+                </a>
+                <section class="user-info-modal col-xs-offset-2">
+                    <h1 class="user-name ">{{display_name}}</h1>
+                    <div class="status">{{status}}</div>
+                    {{#if isStreaming}}
+                    <div class="current-game"><span class="streaming">Currently streaming:</span> {{game}}</div>
+                    {{else}}
+                    <div class="not-streaming">Not currently streaming</div>
+                    {{/if}}
+                </section>
+            </div>
+
+
+            {{#if isStreaming}}
+            <img src="{{preview}}" alt="An image of {{display_name}} playing {{game}}" class="user-preview-modal">
+            {{/if}}
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
