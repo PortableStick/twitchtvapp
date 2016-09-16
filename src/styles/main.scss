@@ -28,7 +28,22 @@
 }
 
 #search-input {
-  width: 70%;
+  transition: width 1.2s, opacity 0.1s 1.2s;
+  width: 0;
+  opacity: 0;
+
+  &.activated {
+    width: 70%;
+    opacity: 1;
+
+    & ~ .add::before {
+      content: ">";
+    }
+  }
+
+  & ~ .add::before {
+    content: "+";
+  }
 }
 
 #users {
