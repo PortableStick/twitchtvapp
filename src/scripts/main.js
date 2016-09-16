@@ -13,6 +13,7 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
         $userModal = $('#user-modal'),
         $buttonInput = $('.sort'),
         $dataList = $('#users'),
+        $searchInput = $('#search-input'),
         gettingFilterInput = Observable.fromEvent($('#filter-input'), 'keyup')
                         .map(e => e.target.value)
                         .startWith(''),
@@ -23,7 +24,7 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
                         })
                         .map(e => $(e.target).data('value'))
                         .startWith('all'),
-        gettingSearchInput = Observable.fromEvent($('#search-input'), 'keyup')
+        gettingSearchInput = Observable.fromEvent($searchInput, 'keyup')
                         .do(e => {
                             if(e.target.value.length === 0) {
                                 $dataList.html('');
@@ -44,6 +45,19 @@ Observable.fromEvent(document, 'DOMContentLoaded')
         $userModal.append(userModalTemplate(data));
         $userModal.modal('show');
     });
+
+Observable.fromEvent($('.add'), 'click')
+    .do(e => {
+        e.preventDefault();
+    })
+    .subscribe(e => {
+        console.log("Doing stuff");
+        if($searchInput.hasClass('activated')) {
+            $searchInput.removeClass('activated');
+        } else {
+            $searchInput.addClass('activated');
+        }
+    })
 
 Observable.fromEvent($userModal, 'hidden.bs.modal')
     .subscribe(e => {
