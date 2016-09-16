@@ -8,9 +8,11 @@ $.noConflict(true);
 
 const existingUserTemplate = handlebars.compile($('#existing-user-template').html()),
         userModalTemplate = handlebars.compile($('#user-modal-template').html()),
+        userResultTemplate = handlebars.compile($('#user-result-template').html()),
         $userList = $('#user-list'),
         $userModal = $('#user-modal'),
         $buttonInput = $('.sort'),
+        $dataList = $('#users'),
         gettingFilterInput = Observable.fromEvent($('#filter-input'), 'keyup')
                         .map(e => e.target.value)
                         .startWith(''),
@@ -21,6 +23,17 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
                         })
                         .map(e => $(e.target).data('value'))
                         .startWith('all'),
+        gettingSearchInput = Observable.fromEvent($('#search-input'), 'keyup')
+                        .do(e => {
+                            if(e.target.value.length === 0) {
+                                $dataList.html('');
+                            }
+                        })
+                        .debounceTime(500)
+                        .filter(e => e.which >= 48 && e.which <= 90)
+                        .filter(e => e.target.value.length > 2)
+                        .distinctUntilChanged()
+                        .map(e => e.target.value),
         storedUsers = new ReplaySubject();
 
 Observable.fromEvent(document, 'DOMContentLoaded')
@@ -35,6 +48,14 @@ Observable.fromEvent(document, 'DOMContentLoaded')
 Observable.fromEvent($userModal, 'hidden.bs.modal')
     .subscribe(e => {
         $userModal.html('');
+    });
+
+gettingSearchInput
+    .flatMap(search => Observable.ajax(`http://localhost:9000/twitch/search/${search}`))
+    .map(response => response.response)
+    .flatMap(user => user)
+    .subscribe(result => {
+        $dataList.append(userResultTemplate(result));
     })
 
 const getUsers = Observable.create(observer => {

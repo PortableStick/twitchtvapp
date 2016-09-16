@@ -18,17 +18,24 @@
             <li class="nav-item"><a href="https://github.com/PortableStick/twitchviewer" class="nav-link" target="_blank">Check me out on <i class="fa fa-github"></i> GitHub <span class="sr-only">Opens in new window</span></a></li>
         </ul>
     </nav>
-    <div class="container-fluid" id="app">
-        <div class="container">
-        <label for="filter form-control">Filter</label>
-        <input type="text" name="filter" id="filter-input" autocomplete="off" autofocus="true">
-        <button class="sort btn btn-primary active" data-value="all">All</button>
-        <button class="sort btn btn-primary" data-value="true">Online</button>
-        <button class="sort btn btn-primary" data-value="false">Offline</button>
+
+        <div class="container" id="app">
+            <div class="controls">
+                <label for="filter-input">Filter</label>
+                <input type="text" name="filter" id="filter-input" autocomplete="off" autofocus="false">
+                <button class="sort btn btn-primary active" data-value="all">All</button>
+                <button class="sort btn btn-primary" data-value="true">Online</button>
+                <button class="sort btn btn-primary" data-value="false">Offline</button>
+                <div id="search">
+                    <input type="text" name="search" id="search-input" autocomplete="off" list="users" placeholder="Search for users here" autofocus="true">
+                    <ul id="users"></ul>
+                    <button class="add btn btn-primary">+</button>
+                </div>
+            </div>
             <h1 class="error"></h1>
             <ul id="user-list"></ul>
         </div>
-    </div>
+
     <template id="existing-user-template">
         <li class="twitch-user row" data-store="{{jsonify @root}}">
             <img src="{{logo}}" class="img-rounded col-xs-2 user-logo thumbnail" alt="{{display_name}}'s TwitchTV profile image">
@@ -82,6 +89,12 @@
           </div>
         </div>
       </div>
+    </template>
+    <template id="user-result-template">
+        <li class="user-result row">
+            <img src="{{logo}}" alt="{{display_name}}'s logo" class="img-rounded result-logo col-xs-2">
+            <p class="result-name col-xs-6">{{display_name}}</p>
+        </li>
     </template>
     <!-- Modal -->
     <div class="modal" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
