@@ -36,11 +36,13 @@
                 <h1 class="user-name">{{display_name}}</h1>
             </a>
             <div class="status col-xs-3">{{status}}</div>
-            {{#if isStreaming}}
-            <div class="current-game col-xs-3"><span class="streaming">Currently streaming:</span> {{game}}</div>
-            {{else}}
-            <div class="not-streaming col-xs-3">Not currently streaming</div>
-            {{/if}}
+            <div class="activity col-xs-4">
+                {{#if isStreaming}}
+                <div class="current-game"><span class="streaming">Currently streaming:</span> {{game}}</div>
+                {{else}}
+                <div class="not-streaming">Not currently streaming</div>
+                {{/if}}
+            </div>
         </li>
     </template>
     <template id="user-modal-template">
