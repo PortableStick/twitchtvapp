@@ -26,6 +26,7 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
 Observable.fromEvent(document, 'DOMContentLoaded')
     .flatMap(() => Observable.fromEvent($('#user-list'), 'click'))
     .map(event => $(event.target).closest('.twitch-user').data('store'))
+    .filter(data => data !== undefined)
     .subscribe(data => {
         $userModal.append(userModalTemplate(data));
         $userModal.modal('show');
