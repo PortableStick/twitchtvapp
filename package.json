@@ -23,9 +23,9 @@
     "setupfolder": "mkdir -p dist/scripts dist/styles dist/images",
     "test": "babel-node src/tests/*.js | (faucet || true) && echo ------------- ",
     "build:html": "cp -r src/index.html dist/",
-    "build:scripts": "browserify -x jquery -x bootstrap -x handlebars -x rxjs src/scripts/*.js -o dist/scripts/main.js",
+    "build:scripts": "browserify -x jquery -x bootstrap -x handlebars -x rxjs -x toastr src/scripts/*.js -o dist/scripts/main.js",
     "build:images": "cp -rf src/images/* dist/images/",
-    "build:vendor": "browserify -r jquery -r bootstrap -r handlebars -r rxjs -o dist/scripts/vendor.js && cat node_modules/bootstrap/dist/css/bootstrap.min.css  | cleancss -o dist/styles/bundle.css && cp node_modules/bootstrap/dist/css/bootstrap.min.css.map dist/styles/bootstrap.min.css.map",
+    "build:vendor": "browserify -r jquery -r bootstrap -r handlebars -r rxjs -r toastr -o dist/scripts/vendor.js && cat node_modules/bootstrap/dist/css/bootstrap.min.css  | cleancss -o dist/styles/bundle.css && cp node_modules/bootstrap/dist/css/bootstrap.min.css.map dist/styles/bootstrap.min.css.map",
     "build:styles": "postcss -u autoprefixer -p postcss-scss src/styles/main.scss | node-sass --output-style compressed --source-map=true > dist/styles/main.css",
     "watch:html": "onchange src/**/*.html -- npm run build:html",
     "watch:js": "onchange src/**/*.js -e src/test/**/*.js -- npm run build:scripts",
@@ -63,6 +63,7 @@
     "bootstrap": "^3.3.7",
     "handlebars": "^4.0.5",
     "jquery": "^3.1.0",
-    "rxjs": "^5.0.0-beta.12"
+    "rxjs": "^5.0.0-beta.12",
+    "toastr": "^2.1.2"
   }
 }
