@@ -5,7 +5,6 @@ window.$ = window.jQuery = $;
 require('bootstrap/js/modal');
 $.noConflict(true);
 
-
 const existingUserTemplate = handlebars.compile($('#existing-user-template').html()),
         userModalTemplate = handlebars.compile($('#user-modal-template').html()),
         userResultTemplate = handlebars.compile($('#user-result-template').html()),
@@ -28,6 +27,8 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
                         .do(e => {
                             if(e.target.value.length === 0) {
                                 $dataList.html('');
+                            } else {
+                                $dataList.show();
                             }
                         })
                         .debounceTime(500)
@@ -51,7 +52,6 @@ Observable.fromEvent($('.add'), 'click')
         e.preventDefault();
     })
     .subscribe(e => {
-        console.log("Doing stuff");
         if($searchInput.hasClass('activated')) {
             $searchInput.removeClass('activated');
         } else {
@@ -62,6 +62,29 @@ Observable.fromEvent($('.add'), 'click')
 Observable.fromEvent($userModal, 'hidden.bs.modal')
     .subscribe(e => {
         $userModal.html('');
+    });
+
+Observable.fromEvent($dataList, 'click')
+    .map(event => $(event.target).closest('.result-name').html())
+    .do(user => {
+        e.stopPropagation();
+        let currentUsers = JSON.parse(localStorage.getItem('users'));
+        currentUsers.push(user);
+        localStorage.setItem('users', JSON.stringify(currentUsers));
+
+        $dataList.hide();
+    })
+    .flatMap(user => Observable.ajax({
+        url:`http://localhost:9000/twitch/${user}`,
+        responseType: 'json'}))
+    .map(response => response.response)
+    .subscribe(storedUsers);
+
+Observable.fromEvent($searchInput, 'focus')
+    .subscribe(event => {
+        if(event.target.value.length > 0) {
+            $dataList.show();
+        }
     });
 
 gettingSearchInput
