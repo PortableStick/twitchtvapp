@@ -69,17 +69,19 @@ Observable.fromEvent($userModal, 'hidden.bs.modal')
 Observable.fromEvent($dataList, 'click')
     .map(event => $(event.target).closest('.result-name').html())
     .filter(name => name !== "undefined" && name !== null && name.length > 0)
-    .do(user => {
+    .filter(user => {
         let currentUsers = JSON.parse(localStorage.getItem('users'));
-        if(currentUsers.indexOf(user) === -1) {
-            console.log(currentUsers.indexOf(user));
+        if(currentUsers.findOne(user) === -1) {
+            console.log(currentUsers.findOne(user));
             currentUsers.push(user);
             localStorage.setItem('users', JSON.stringify(currentUsers));
             toastr.success("User added!");
             $dataList.hide();
             $searchInput.val('');
+            return true;
         } else {
             toastr.warning("User already on list");
+            return false;
         }
     })
     .flatMap(user => Observable.ajax({
