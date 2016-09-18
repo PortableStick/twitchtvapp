@@ -45,7 +45,7 @@ Observable.fromEvent(document, 'DOMContentLoaded')
     .subscribe(data => {
         $userModal.append(userModalTemplate(data));
         $userModal.modal('show');
-    });
+    }, handleError);
 
 Observable.fromEvent($('.add'), 'click')
     .do(event => {
@@ -64,7 +64,7 @@ Observable.fromEvent($('.add'), 'click')
 Observable.fromEvent($userModal, 'hidden.bs.modal')
     .subscribe(e => {
         $userModal.html('');
-    });
+    }, handleError);
 
 Observable.fromEvent($dataList, 'click')
     .map(event => $(event.target).closest('.result-name').html())
@@ -86,14 +86,14 @@ Observable.fromEvent($dataList, 'click')
         url:`http://localhost:9000/twitch/${user}`,
         responseType: 'json'}))
     .map(response => response.response)
-    .subscribe(storedUsers);
+    .subscribe(storedUsers, handleError);
 
 Observable.fromEvent($searchInput, 'focus')
     .subscribe(event => {
         if(event.target.value.length > 0) {
             $dataList.show();
         }
-    });
+    }, handleError);
 
 gettingSearchInput
     .do(e => {
@@ -105,11 +105,11 @@ gettingSearchInput
     .subscribe(result => {
         $dataList.append(userResultTemplate(result));
         $dataList.show();
-    })
+    }, handleError)
 
 const getUsers = Observable.create(observer => {
     if(!localStorage.getItem('hasBeenRun')) {
-        const startingNames = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+        const startingNames = ["dedgeomatic", "freecodecamp", "storbeck", "terakilobyte", "habathcx","RobotCaleb","thomasballinger","noobs2ninjas","beohoff","cretetion","sheevergaming","TR7K","OgamingSC2","ESL_SC2"];
         localStorage.setItem('users', JSON.stringify(startingNames));
         localStorage.setItem('hasBeenRun', 'true');
         observer.next(startingNames);
@@ -121,7 +121,8 @@ const getUsers = Observable.create(observer => {
         url:`http://localhost:9000/twitch/${user}`,
         responseType: 'json'}))
     .map(response => response.response)
-    .subscribe(storedUsers);
+    .filter(user => user.url !== null)
+    .subscribe(storedUsers, handleError);
 
 gettingFilterInput
     .combineLatest(gettingButtonInput, (filter, button) => ({filter, button}))
@@ -137,7 +138,7 @@ gettingFilterInput
     }))
     .subscribe(data => {
         $userList.append(existingUserTemplate(data))
-    });
+    }, handleError);
 
 Observable.fromEvent($userModal, 'click')
     .filter(event => $(event.target).hasClass('delete-button'))
@@ -152,9 +153,12 @@ Observable.fromEvent($userModal, 'click')
                 localStorage.setItem('users', JSON.stringify(currentUsers));
                 // $userList.html('');
                 const userToGo = $userList.find(`#${name}`);
-                console.log(userToGo);
                 userToGo.remove();
-    });
+    }, handleError);
+
+function handleError(error) {
+    console.error(error);
+}
 
 handlebars.registerHelper('jsonify', object => JSON.stringify(object));
 
