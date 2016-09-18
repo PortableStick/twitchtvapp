@@ -37,9 +37,9 @@
         </div>
 
     <template id="existing-user-template">
-        <li class="twitch-user row" data-store="{{jsonify @root}}">
+        <li class="twitch-user row" data-store="{{jsonify @root}}" id="{{display_name}}">
             <img src="{{logo}}" class="img-rounded col-xs-2 user-logo thumbnail" alt="{{display_name}}'s TwitchTV profile image">
-            <a href="{{url}}" class="col-xs-3" target="_blank">
+            <a href="{{url}}" class="col-xs-2" target="_blank" title="{{display_name}}'s user page - new window">
                 <h1 class="user-name">{{display_name}}</h1>
             </a>
             <div class="status col-xs-3">{{status}}</div>
@@ -64,7 +64,7 @@
           <div class="modal-body">
 
             <div class="row">
-                <a href="{{url}}" id="user-logo-modal" class="col-xs-6" target="_blank">
+                <a href="{{url}}" id="user-logo-modal" class="col-xs-6" target="_blank" title="{{display_name}}'s user page - new window">
                     <img src="{{logo}}" alt="{{display_name}}'s TwitchTV profile image">
                 </a>
                 <section class="user-info-modal col-xs-offset-2">
@@ -85,6 +85,7 @@
 
           </div>
           <div class="modal-footer">
+            <button class="btn btn-secondary btn-danger delete-button" type="button" data-name="{{display_name}}">Delete</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
