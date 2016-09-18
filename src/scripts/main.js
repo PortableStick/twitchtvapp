@@ -55,9 +55,13 @@ Observable.fromEvent($('.add'), 'click')
         if($searchInput.hasClass('activated')) {
             $searchInput.removeClass('activated');
             $filterInput.focus();
+            $dataList.hide();
         } else {
             $searchInput.addClass('activated');
             $searchInput.focus();
+            if($searchInput.val().length > 0) {
+                $dataList.show();
+            }
         }
     })
 
