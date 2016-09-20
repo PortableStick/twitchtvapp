@@ -1,197 +1,176 @@
 .navbar {
-  text-align: center;
-  margin-bottom: 0;
-
-  .app-name {
-    display: inline-block;
-    font-size: 1.4em;
-    margin: 0;
-    padding-top: 15px;
-  }
+    text-align: center;
+    margin-bottom: 0;
+    .app-name {
+        display: inline-block;
+        font-size: 1.4em;
+        margin: 0;
+        padding-top: 15px;
+    }
 }
 
 #app {
-  margin-top: 70px;
+    margin-top: 70px;
 }
 
 #user-list {
-  list-style-type: none;
-  margin-top: 25px;
+    list-style-type: none;
+    margin-top: 25px;
 }
 
 #search {
-  position: relative;
-  width: 400px;
-  margin: 0 auto;
-  display: inline-block;
-  float: right;
+    position: relative;
+    width: 400px;
+    margin: 0 auto;
+    display: inline-block;
+    float: right;
 }
 
 #search-input {
-  transition: width 1.2s, opacity 0.1s 1.2s;
-  width: 0;
-  opacity: 0;
-
-  &.activated {
-    width: 70%;
-    opacity: 1;
-
-    & ~ .add::before {
-      content: "<";
+    transition: width 1.2s, opacity 0.1s 1.2s;
+    width: 0;
+    opacity: 0;
+    &.activated {
+        width: 70%;
+        opacity: 1;
+        & ~ .add::before {
+            content: "<";
+        }
     }
-  }
-
-  & ~ .add::before {
-    content: "+";
-  }
+    & ~ .add::before {
+        content: "+";
+    }
 }
 
 #users {
-  width: 70%;
-  list-style-type: none;
-  display: none;
-  z-index: 15;
-  position: absolute;
-  top: 30px;
-  left: 0;
-  right: 0;
-  padding: 0;
-  margin: 0;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #cbcfe2 #c8cee7 #c4c7d7;
-  border-radius: 3px;
-  background-color: #fdfdfd;
-  background-image: linear-gradient(top, #fdfdfd, #eceef4);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-
-  &:not(:empty) {
-    display: block;
-  }
-
-  &:empty {
+    width: 70%;
+    list-style-type: none;
     display: none;
-  }
-
-  li {
-    cursor: pointer;
-    clear: left;
-    margin: 0;
-
-    .result-name {
-      transform: translateY(30%);
-      padding: 2px 5px;
-    }
-
-    &:first-child {
-      .result-name {
-        padding-bottom: 2px;
-        padding-top: 0;
-      }
-    }
-
-    &:last-child {
-      .result-name {
-        padding-top: 2px;
-        padding-bottom: 0;
-      }
-    }
-
-    &:hover {
-      background-color: steelblue;
-      color: white;
-    }
-
-    &:first-child {
-      margin-top: -1px;
-    }
-  }
-
-  .result-logo {
-    max-width: 30px;
-    margin: 0;
+    z-index: 15;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
     padding: 0;
-  }
+    margin: 0;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #cbcfe2 #c8cee7 #c4c7d7;
+    border-radius: 3px;
+    background-color: #fdfdfd;
+    background-image: linear-gradient(top, #fdfdfd, #eceef4);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    &:not(: empty) {
+        display: block;
+    }
+    &:empty {
+        display: none;
+    }
+    li {
+        cursor: pointer;
+        clear: left;
+        margin: 0;
+        .result-name {
+            transform: translateY(30%);
+            padding: 2px 5px;
+        }
+        &:first-child {
+            .result-name {
+                padding-bottom: 2px;
+                padding-top: 0;
+            }
+        }
+        &:last-child {
+            .result-name {
+                padding-top: 2px;
+                padding-bottom: 0;
+            }
+        }
+        &:hover {
+            background-color: steelblue;
+            color: white;
+        }
+        &:first-child {
+            margin-top: -1px;
+        }
+    }
+    .result-logo {
+        max-width: 30px;
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .twitch-user {
-  margin-top: 15px;
-  cursor: pointer;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  background-size: 100%;
-  z-index: 10;
-  position: relative;
-
-  &::after {
-    content: 'Click to see more';
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    background-size: 100%;
+    z-index: 10;
     position: relative;
-    right: -10000px;
-    transition: right 0.3s;
-    color: white;
-    font-size: 1.7em;
-    opacity: 1;
-    transform: translateY(20px);
-  }
-
-  &::before {
-    opacity: 0;
-    background-image: linear-gradient(left, rgba(255, 255, 255, 0), steelblue 90%);
-    transition: opacity 0.65s;
-    transition-timing-function: ease-in-out;
-    z-index: -100;
-    display: block;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    content: '';
-    box-shadow: inset 0 0 10px 10px white, 0 0 10px 10px white;
-  }
-
-  &:hover {
-    &::before {
-      opacity: 0.4;
-    }
-
     &::after {
-      right: 170px;
+        content: 'Click to see more';
+        position: relative;
+        right: -10000px;
+        transition: right 0.3s;
+        color: white;
+        font-size: 1.7em;
+        opacity: 1;
+        transform: translateY(20px);
     }
-  }
-
-  .user-logo {
-    max-width: 100px;
-  }
-
-  h1 {
-    font-size: 1.7em;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  .activity {
-    font-size: 1.2em;
-  }
+    &::before {
+        opacity: 0;
+        background-image: linear-gradient(left, rgba(255, 255, 255, 0), steelblue 90%);
+        transition: opacity 0.65s;
+        transition-timing-function: ease-in-out;
+        z-index: -100;
+        display: block;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: '';
+        box-shadow: inset 0 0 10px 10px white, 0 0 10px 10px white;
+    }
+    &:hover {
+        &::before {
+            opacity: 0.4;
+        }
+        &::after {
+            right: 170px;
+        }
+    }
+    .user-logo {
+        max-width: 100px;
+    }
+    h1 {
+        font-size: 1.7em;
+    }
+    a {
+        text-decoration: none;
+    }
+    .activity {
+        font-size: 1.2em;
+    }
 }
 
 .modal-body {
-  .user-preview-modal {
-    margin-top: 20px;
-  }
+    .user-preview-modal {
+        margin-top: 20px;
+    }
 }
 
 .streaming {
-  color: green;
+    color: green;
 }
 
 .not-streaming {
-  color: red;
+    color: red;
 }
 
 .error {
-  color: red;
+    color: red;
 }

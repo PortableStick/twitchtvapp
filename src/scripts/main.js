@@ -38,7 +38,7 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
                         .map(e => e.target.value),
         storedUsers = new ReplaySubject();
 
-Observable.fromEvent(document, 'DOMContentLoaded')
+                Observable.fromEvent(document, 'DOMContentLoaded')
     .flatMap(() => Observable.fromEvent($('#user-list'), 'click'))
     .map(event => $(event.target).closest('.twitch-user').data('store'))
     .filter(data => data !== undefined)
