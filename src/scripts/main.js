@@ -89,7 +89,7 @@ Observable.fromEvent($dataList, 'click')
         }
     })
     .flatMap(user => Observable.ajax({
-        url:`http://localhost:9000/twitch/${user}`,
+        url:`https://api.gregoftheweb.com/twitch/${user}`,
         responseType: 'json'}))
     .map(response => response.response)
     .subscribe(storedUsers, handleError);
