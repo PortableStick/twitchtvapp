@@ -38,7 +38,7 @@ const existingUserTemplate = handlebars.compile($('#existing-user-template').htm
                         .map(e => e.target.value),
         storedUsers = new ReplaySubject();
 
-                Observable.fromEvent(document, 'DOMContentLoaded')
+Observable.fromEvent(document, 'DOMContentLoaded')
     .flatMap(() => Observable.fromEvent($('#user-list'), 'click'))
     .map(event => $(event.target).closest('.twitch-user').data('store'))
     .filter(data => data !== undefined)
@@ -105,7 +105,7 @@ gettingSearchInput
     .do(e => {
         $dataList.html('');
     })
-    .flatMap(search => Observable.ajax(`http://localhost:9000/twitch/search/${search}`))
+    .flatMap(search => Observable.ajax(`https://api.gregoftheweb.com/twitch/search/${search}`))
     .map(response => response.response)
     .flatMap(user => user)
     .subscribe(result => {
@@ -124,7 +124,7 @@ const getUsers = Observable.create(observer => {
     }
 }).flatMap(user => user)
     .flatMap(user => Observable.ajax({
-        url:`http://localhost:9000/twitch/${user}`,
+        url:`https://api.gregoftheweb.com/twitch/${user}`,
         responseType: 'json'}))
     .map(response => response.response)
     .filter(user => user.url !== null)
@@ -133,6 +133,7 @@ const getUsers = Observable.create(observer => {
 gettingFilterInput
     .combineLatest(gettingButtonInput, (filter, button) => ({filter, button}))
     .do(() => {
+        $('#loader').hide();
         $userList.html('');
     })
     .flatMap(input => storedUsers.filter(user => {

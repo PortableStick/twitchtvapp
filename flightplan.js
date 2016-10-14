@@ -61,6 +61,7 @@ plan.remote(['staging', 'production'], function(remote) {
     remote.exec(`chown -R ${plan.runtime.options.ownerUser}:${plan.runtime.options.group} ${plan.runtime.options.webRoot}/${appName}/${versionedDir}`);
     remote.with(`cd ${plan.runtime.options.webRoot}/apps`, function() {
         remote.log("Linking")
+        remote.exec(`rm -rf ${appName}`);
         remote.exec(`ln -sf ../${appName}/${versionedDir} ${appName}`);
     });
 });
